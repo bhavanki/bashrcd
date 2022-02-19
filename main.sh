@@ -16,9 +16,12 @@ declare -A bashrcd
 
 #echo -n ".bashrc.d ..."
 for f in $(find "$HOME/.bashrc.d" -maxdepth 1 -name '*.sh' | sort); do
-  #echo -ne "\033[2K"\\r"Sourcing $f"
-  # shellcheck source=/dev/null
-  source "$f"
+  key=$(basename "$f" | cut -d . -f 2)
+  if [[ -z ${bashrcd[$key]} ]]; then
+    #echo -ne "\033[2K"\\r"Sourcing $f"
+    # shellcheck source=/dev/null
+    source "$f"
+    bashrcd[$key]=1
+  fi
 done
 #echo -e "\033[2K"\\r".bashrc.d done"
-
